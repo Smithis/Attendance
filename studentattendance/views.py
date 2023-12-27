@@ -49,7 +49,7 @@ def home(request):
             return render(request,"index.html",context)
         return render(request,"index.html")
     else:
-        return redirect("https://studentattence-v3ab.onrenderr.com")
+        return redirect("https://studentattendance-v3ab.onrenderr.com")
 
 def main(request):
     if(request.method=="POST"):
