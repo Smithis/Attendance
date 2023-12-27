@@ -49,7 +49,7 @@ def home(request):
             return render(request,"index.html",context)
         return render(request,"index.html")
     else:
-        return redirect("https://google.com")
+        return redirect("https://studentattence-v3ab.onrenderr.com")
 
 def main(request):
     if(request.method=="POST"):
@@ -63,7 +63,7 @@ def main(request):
             url="False"
             context={"data":"Success"}
         elif(key=="display"):
-            context={"data":Rollno.objects.all()}
+            context={"data":list(Rollno.objects.all())}
                 
         return render(request,"main.html",context)
 
