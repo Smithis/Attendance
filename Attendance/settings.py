@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework',
     'studentattendance.apps.StudentattendanceConfig',
     'django.contrib.admin',
     'django.contrib.auth',
