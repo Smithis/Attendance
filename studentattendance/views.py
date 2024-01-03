@@ -34,7 +34,6 @@ toDate=
 excludeothersubjects=false"""
     
         q=requests.post(url, cookies=cookiess, data=data)
-        print(q.text)
         t=q.content[:9]
         if(t==b'\r\n\r\n<!DOC'):
             cooki()
@@ -75,23 +74,22 @@ def main(request):
 @api_view()
 def apid(request,roll):
     l=getAttendance(roll)
-    if(l=="'<span class=\\'style24\\'>No attendance tables/Database error !</span>'"):
+    try:
+        j={}
+        data={}
+        x=re.findall('>[a-zA-Z0-9% ./-]+',l)
+        l=[i[1:] for i in x]
+        for i in range(0,10,2):
+            j[l[i]]=l[i+1]
+        data.update(j)
+        j.clear()
+        for i in range(15,95,5):
+            j[l[i+1]]=[l[i+2],l[i+3],l[i+4]]
+        data.update(j)
+        j.clear()
+        i=95
+        j[l[i]]=[l[i+1],l[i+2],l[i+3]]
+        data.update(j)
+        return Response(data,200)
+    except:
         return Response("invalid",404)
-    l=l[1073::]
-    x=re.findall('>[a-zA-Z0-9% ./-]+',l)
-    l=[i[1:] for i in x]
-
-    data={}
-    j={}
-    for i in range(0,10,2):
-        j[l[i]]=l[i+1]
-    data.update(j)
-    j.clear()
-    for i in range(15,95,5):
-        j[l[i+1]]=[l[i+2],l[i+3],l[i+4]]
-    data.update(j)
-    j.clear()
-    i=95
-    j[l[i]]=[l[i+1],l[i+2],l[i+3]]
-    data.update(j)
-    return Response(data,200)
