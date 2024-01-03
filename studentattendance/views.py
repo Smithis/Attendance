@@ -34,12 +34,13 @@ toDate=
 excludeothersubjects=false"""
     
         q=requests.post(url, cookies=cookiess, data=data)
+        print(q.text)
         t=q.content[:9]
         if(t==b'\r\n\r\n<!DOC'):
             cooki()
             return getAttendance(roll)
         else:
-            return q.text
+            return q.text[999:5460]
     except Exception as e:
         return "retry"
 
