@@ -39,7 +39,7 @@ excludeothersubjects=false"""
             cooki()
             return getAttendance(roll)
         else:
-            return q.text[940:-318]
+            return q.text[980:-318]
     except Exception as e:
         return "retry"
 
