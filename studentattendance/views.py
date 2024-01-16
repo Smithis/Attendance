@@ -10,6 +10,10 @@ import re
 
 url="False"
 
+def  AdsVIew(View):
+    line="google.com, pub-7947746088338356, DIRECT, f08c47fec0942fa0"
+    return HttpResponse(line)
+    
 def cooki():  
     try:
         q=requests.get("http://login.sreyas.ac.in:80/authcheck.aspx",allow_redirects=False)	
