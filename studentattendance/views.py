@@ -1,15 +1,19 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
+from django.views import View
 import requests
 from .models import Rollno
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
 import re
+import json
 
 # Create your views here.
 
 url="False"
 
-    
+
+
 def cooki():  
     try:
         q=requests.get("http://login.sreyas.ac.in:80/authcheck.aspx",allow_redirects=False)	
@@ -34,6 +38,7 @@ toDate=
 excludeothersubjects=false"""
     
         q=requests.post(url, cookies=cookiess, data=data)
+        print(q.text)
         t=q.content[:9]
         if(t==b'\r\n\r\n<!DOC'):
             cooki()
@@ -71,6 +76,7 @@ def main(request):
         return render(request,"main.html",context)
 
     return render(request,"main.html")
+
 @api_view()
 def apid(request,roll):
     l=getAttendance(roll)
