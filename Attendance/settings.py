@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'Attendance.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.parse("postgres://student_e5nz_user:Gz74v2LhUwgL6ygV8fh1n4sMSoh8ytEm@dpg-cm5hddgcmk4c73cptiug-a.oregon-postgres.render.com/student_e5nz")
+    'default': dj_database_url.parse("postgres://attendance_fr3y_user:v5orLZgPiOSMba8U65dHvr0HVMTODflH@dpg-cmugg1n109ks73c22rog-a.oregon-postgres.render.com/attendance_fr3y")
 }
 
 
