@@ -3,16 +3,12 @@ from django.http import HttpResponse
 import requests
 from .models import Rollno
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
 import re
 
 # Create your views here.
 
 url="False"
 
-def  AdsVIew(View):
-    line="google.com, pub-7947746088338356, DIRECT, f08c47fec0942fa0"
-    return HttpResponse(line)
     
 def cooki():  
     try:
