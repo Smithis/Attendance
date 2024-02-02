@@ -12,8 +12,7 @@ import json
 
 url="False"
 
-
-
+    
 def cooki():  
     try:
         q=requests.get("http://login.sreyas.ac.in:80/authcheck.aspx",allow_redirects=False)	
@@ -38,7 +37,6 @@ toDate=
 excludeothersubjects=false"""
     
         q=requests.post(url, cookies=cookiess, data=data)
-        print(q.text)
         t=q.content[:9]
         if(t==b'\r\n\r\n<!DOC'):
             cooki()
