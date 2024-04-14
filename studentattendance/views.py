@@ -17,13 +17,7 @@ def cooki():
     try:
         q=requests.get("http://login.sreyas.ac.in:80/authcheck.aspx",allow_redirects=False)	
         cook=q.cookies.get_dict()
-        q=requests.get("http://login.sreyas.ac.in:80/default.aspx",allow_redirects=False,cookies=cook)
-        burp0_data = {"__VIEWSTATE": q.text[1759:2047], "__VIEWSTATEGENERATOR": "CA0B0334", "__EVENTVALIDATION": q.text[2227:2315], "txtId1": '', "txtPwd1": '', "txtId2": "21ve1a6680", "txtPwd2": "webcap", "imgBtn2.x": "40", "imgBtn2.y": "4"}
-        q=requests.post("http://login.sreyas.ac.in:80/default.aspx",cookies=cook,data=burp0_data,allow_redirects=False)
-        with open("keys.txt","w") as f:
-            f.write(cook['ASP.NET_SessionId']+'\n'+q.cookies['frmAuth'])
-    except:
-        return "retry"
+return cook
 
 def getAttendance(roll):
     try:
