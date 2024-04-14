@@ -17,7 +17,7 @@ def cooki():
     try:
         q=requests.get("http://login.sreyas.ac.in:80/authcheck.aspx",allow_redirects=False)	
         cook=q.cookies.get_dict()
-return cook
+    return cook
 
 def getAttendance(roll):
     try:
