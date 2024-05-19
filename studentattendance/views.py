@@ -1,10 +1,12 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.views import View
-import requests
-from .models import Rollno
+from django.contrib.sessions.models import Session
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+import requests
+from .models import Rollno,Final,Apii
+
 import re
 import json
 
@@ -17,7 +19,13 @@ def cooki():
     try:
         q=requests.get("http://login.sreyas.ac.in:80/authcheck.aspx",allow_redirects=False)	
         cook=q.cookies.get_dict()
-    return cook
+        q=requests.get("http://login.sreyas.ac.in:80/default.aspx",allow_redirects=False,cookies=cook)
+        burp0_data = {"__VIEWSTATE": q.text[1759:2047], "__VIEWSTATEGENERATOR": "CA0B0334", "__EVENTVALIDATION": q.text[2227:2315], "txtId1": '', "txtPwd1": '', "txtId2": "21ve1a6680", "txtPwd2": "webcap", "imgBtn2.x": "40", "imgBtn2.y": "4"}
+        q=requests.post("http://login.sreyas.ac.in:80/default.aspx",cookies=cook,data=burp0_data,allow_redirects=False)
+        with open("keys.txt","w") as f:
+            f.write(cook['ASP.NET_SessionId']+'\n'+q.cookies['frmAuth'])
+    except:
+        return "retry"
 
 def getAttendance(roll):
     try:
@@ -41,15 +49,24 @@ excludeothersubjects=false"""
         return "retry"
 
 def home(request):
+
+    if 'data' in request.session and request.session['data']=="False":
+        return HttpResponse("<h1>multiple times not allowed try on other device if not please try after 24 hours...</h1>")
+
     if(url=="False"):
         if(request.method=="POST"):
             roll=request.POST.get('rolln')
-            context={'data':getAttendance(roll)}
+            js="""
+            window.location.href="https://link2paisa.com/attendancess";
+            """
+            request.session['data']=getAttendance(roll);
+            request.session['roll']=roll;
+            context={'js':js}
             Rollno(roll=roll).save()
             return render(request,"index.html",context)
         return render(request,"index.html")
     else:
-        return redirect("https://studentattence-v3ab.onrenderr.com")
+        return redirect("https://google.com")
 
 def main(request):
     if(request.method=="POST"):
@@ -64,7 +81,14 @@ def main(request):
             context={"data":"Success"}
         elif(key=="display"):
             context={"data":list(Rollno.objects.all())}
-                
+        elif(key=="flushs"):
+            Session.objects.all().delete()
+            context={"data":"Success"}
+        elif(key=="flush"):
+            request.session.flush()
+            context={"data":"Success"}
+
+       
         return render(request,"main.html",context)
 
     return render(request,"main.html")
@@ -72,22 +96,17 @@ def main(request):
 @api_view()
 def apid(request,roll):
     l=getAttendance(roll)
-    try:
-        j={}
-        data={}
-        x=re.findall('>[a-zA-Z0-9% ./-]+',l)
-        l=[i[1:] for i in x]
-        for i in range(0,10,2):
-            j[l[i]]=l[i+1]
-        data.update(j)
-        j.clear()
-        for i in range(15,95,5):
-            j[l[i+1]]=[l[i+2],l[i+3],l[i+4]]
-        data.update(j)
-        j.clear()
-        i=95
-        j[l[i]]=[l[i+1],l[i+2],l[i+3]]
-        data.update(j)
-        return Response(data,200)
-    except:
-        return Response("invalid",404)
+    if(l!="retry"):
+        Apii(roll=roll).save()
+        return Response(l,200)
+    else:
+        return Response("invdalid",404)
+    
+
+
+def res(request):
+    context={"data":request.session.get("data")}
+    request.session['data']="False"
+    Final(roll=request.session['roll']).save()
+    del request.session['roll']
+    return render(request,"result.html",context)
